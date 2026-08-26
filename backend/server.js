@@ -3,6 +3,8 @@ require('dotenv').config(); // loads variables from .env
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
+const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
 
@@ -18,7 +20,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'SyncDoc backend is running' });
 });
 
-// We'll add real routes here in the next steps (auth, documents, export)
+app.use('/api/auth', authRoutes);
+
+// Error handler must be added last, after all routes
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
