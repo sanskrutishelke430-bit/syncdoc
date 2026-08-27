@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 const errorHandler = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -21,6 +22,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/documents', documentRoutes);
 
 // Error handler must be added last, after all routes
 app.use(errorHandler);

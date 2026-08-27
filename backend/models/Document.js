@@ -15,10 +15,16 @@ const astNodeSchema = new mongoose.Schema({
   },
   content: { type: String, default: '' },
   attributes: { type: mongoose.Schema.Types.Mixed, default: {} },
-  children: { type: [mongoose.Schema.Types.Mixed], default: [] }, // nested nodes
+  children: { type: [mongoose.Schema.Types.Mixed], default: [] },
   createdBy: { type: String, required: true },
   updatedAt: { type: Date, default: Date.now },
-}, { _id: false }); // we use our own "id" field, not Mongo's default _id
+}, { _id: false });
+
+// The overall AST wrapper (a document node containing top-level children)
+const astSchema = new mongoose.Schema({
+  type: { type: String, default: 'document' },
+  children: { type: [astNodeSchema], default: [] },
+}, { _id: false });
 
 const documentSchema = new mongoose.Schema({
   title: {
@@ -36,14 +42,11 @@ const documentSchema = new mongoose.Schema({
     ref: 'User',
   }],
   ast: {
-    type: {
-      type: { type: String, default: 'document' },
-      children: { type: [astNodeSchema], default: [] },
-    },
+    type: astSchema,
     default: () => ({ type: 'document', children: [] }),
   },
 }, {
-  timestamps: true, // adds createdAt and updatedAt automatically
+  timestamps: true,
 });
 
 module.exports = mongoose.model('Document', documentSchema);
