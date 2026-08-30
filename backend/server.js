@@ -6,6 +6,8 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const errorHandler = require('./middleware/errorMiddleware');
+const setupCollaboration = require('./services/collaborationServer');
+const http = require('http');
 
 const app = express();
 
@@ -28,6 +30,13 @@ app.use('/api/documents', documentRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+// Create a raw HTTP server from our Express app, so we can attach WebSocket to it
+const httpServer = http.createServer(app);
+
+// Attach the real-time collaboration (WebSocket) handling
+setupCollaboration(httpServer);
+
+httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

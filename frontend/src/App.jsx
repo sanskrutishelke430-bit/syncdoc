@@ -1,122 +1,96 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// App.jsx — TEMPORARY: minimal test to prove real-time sync works.
+// We'll replace this with the real app (routing, pages, etc.) once sync is confirmed.
+import { useEffect, useState } from 'react';
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [text, setText] = useState('');
+
+  useEffect(() => {
+    // Create a Yjs document — this holds the shared, syncable data
+    const ydoc = new Y.Doc();
+
+    // Connect to our backend's WebSocket relay.
+    // "test-room" is the shared "room" name — anyone connecting with
+    // this same name will sync together, just like a real document ID would.
+    const provider = new WebsocketProvider('ws://localhost:5000', 'test-room', ydoc);
+
+    // A shared text type — Yjs's special data structure for collaborative text
+    const ytext = ydoc.getText('shared-text');
+
+    // Whenever the shared text changes (by us OR another connected user), update our display
+    const updateText = () => setText(ytext.toString());
+    ytext.observe(updateText);
+    updateText(); // set initial value
+
+    // Cleanup when the component unmounts
+    return () => {
+      ytext.unobserve(updateText);
+      provider.destroy();
+      ydoc.destroy();
+    };
+  }, []);
+
+  const handleChange = (e) => {
+    // This is a simplified way to update shared text —
+    // we'll use a proper editor binding later for the real block editor
+    const ydoc = window.__ydoc; // placeholder, replaced below
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <div style={{ padding: '40px', fontFamily: 'sans-serif' }}>
+      <h1>SyncDoc — Real-Time Sync Test</h1>
+      <p>Open this same page in two browser windows and type below. Both should update live.</p>
+      <SyncTextBox />
+    </div>
+  );
 }
 
-export default App
+// Separated into its own component so the Yjs binding logic is self-contained
+function SyncTextBox() {
+  const [text, setText] = useState('');
+  const [ydocRef, setYdocRef] = useState(null);
+  const [ytextRef, setYtextRef] = useState(null);
+
+  useEffect(() => {
+    const ydoc = new Y.Doc();
+    const provider = new WebsocketProvider('ws://localhost:5000', 'test-room', ydoc);
+    const ytext = ydoc.getText('shared-text');
+
+    const updateText = () => setText(ytext.toString());
+    ytext.observe(updateText);
+    updateText();
+
+    setYdocRef(ydoc);
+    setYtextRef(ytext);
+
+    return () => {
+      ytext.unobserve(updateText);
+      provider.destroy();
+      ydoc.destroy();
+    };
+  }, []);
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    if (!ytextRef) return;
+
+    // Replace the entire shared text with the new value.
+    // (Simple approach for this test — the real editor will do smarter, position-based edits.)
+    ytextRef.delete(0, ytextRef.length);
+    ytextRef.insert(0, newValue);
+  };
+
+  return (
+    <textarea
+      value={text}
+      onChange={handleChange}
+      rows={10}
+      style={{ width: '100%', maxWidth: '600px', fontSize: '16px', padding: '10px' }}
+      placeholder="Type here..."
+    />
+  );
+}
+
+export default App;
