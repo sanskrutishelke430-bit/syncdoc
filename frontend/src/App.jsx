@@ -1,15 +1,9 @@
-// App.jsx — TEMPORARY: previewing the Sidebar component
-import Sidebar from './components/Sidebar';
+// App.jsx — TEMPORARY: previewing the Dashboard page
+// (We'll add real routing with React Router in a later step)
+import Dashboard from './pages/Dashboard';
 
 function App() {
-  return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar activeItem="documents" />
-      <div style={{ padding: '2rem' }}>
-        <h1>Main content area will go here</h1>
-      </div>
-    </div>
-  );
+  return <Dashboard />;
 }
 
 export default App;
