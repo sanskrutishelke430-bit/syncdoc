@@ -1,0 +1,7 @@
+/* BlockEditor.css — layout for the block editor container */
+
+.block-editor {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}

@@ -1,0 +1,101 @@
+/* Block.css — styles for individual blocks, varying by type */
+
+.block {
+  margin-bottom: 4px;
+}
+
+.block-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  padding: 4px 2px;
+  line-height: 1.5;
+}
+
+.block-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Paragraph — default styling, nothing extra needed */
+.block-paragraph .block-input {
+  font-size: 15px;
+}
+
+/* Headings — bigger and bolder, matching heading font */
+.block-heading1 .block-input {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.block-heading2 .block-input {
+  font-family: var(--font-heading);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.block-heading3 .block-input {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 600;
+}
+
+/* Quote — left border accent, italic, muted color */
+.block-quote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 12px;
+}
+
+.block-quote .block-input {
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+/* Code block — monospace font, light background, rounded corners */
+.block-codeBlock {
+  background: var(--color-sidebar);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.block-codeBlock .block-input {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+}
+
+/* Divider — a simple horizontal line, no text input needed visually but kept consistent */
+.block-divider .block-input {
+  display: none;
+}
+
+.block-divider::before {
+  content: '';
+  display: block;
+  height: 1px;
+  background: var(--color-border);
+  margin: 12px 0;
+}
+
+/* List items — small bullet/number indicator using CSS, actual text still in the input */
+.block-bulletList {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.block-bulletList::before {
+  content: '•';
+  color: var(--color-text-muted);
+  margin-top: 6px;
+}
+
+.block-numberedList {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
