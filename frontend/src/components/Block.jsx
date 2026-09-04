@@ -1,8 +1,8 @@
 // Block.jsx — renders and edits a single block, based on its type
 import './Block.css';
+import BlockToolbar from './BlockToolbar';
 
-function Block({ block, onChange, onKeyDown, onFocus, autoFocus }) {
-  const handleInput = (e) => {
+function Block({ block, onChange, onKeyDown, onFocus, autoFocus, onTypeChange }) {  const handleInput = (e) => {
     onChange(block.id, e.target.value);
   };
 
@@ -22,8 +22,11 @@ function Block({ block, onChange, onKeyDown, onFocus, autoFocus }) {
 
   // Code blocks and quotes get a distinct visual treatment via CSS classes,
   // but all types share the same underlying editable text area for now.
-  return (
+    return (
     <div className={className}>
+      <div className="block-toolbar-wrapper">
+        <BlockToolbar onSelectType={(newType) => onTypeChange(block.id, newType)} />
+      </div>
       <textarea
         className="block-input"
         value={block.content}

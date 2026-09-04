@@ -5,6 +5,7 @@ import Block from './Block';
 import {
   createBlock,
   updateBlockContent,
+  updateBlockType,
   insertBlockAfter,
   deleteBlock,
   findBlockById,
@@ -31,6 +32,9 @@ function BlockEditor({ initialBlocks = [], onBlocksChange, currentUser = 'user' 
 
   const handleFocus = (blockId) => {
     setFocusedBlockId(blockId);
+  };
+  const handleTypeChange = (blockId, newType) => {
+    updateBlocks(updateBlockType(blocks, blockId, newType));
   };
 
   const handleKeyDown = (e, blockId) => {
@@ -62,12 +66,13 @@ function BlockEditor({ initialBlocks = [], onBlocksChange, currentUser = 'user' 
   return (
     <div className="block-editor">
       {blocks.map((block) => (
-        <Block
+               <Block
           key={block.id}
           block={block}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onFocus={handleFocus}
+          onTypeChange={handleTypeChange}
           autoFocus={block.id === focusedBlockId}
         />
       ))}

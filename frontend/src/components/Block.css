@@ -1,4 +1,18 @@
 /* Block.css — styles for individual blocks, varying by type */
+.block {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.block-toolbar-wrapper {
+  padding-top: 6px;
+  flex-shrink: 0;
+}
+
+.block-input {
+  flex: 1;
+}
 
 .block {
   margin-bottom: 4px;
