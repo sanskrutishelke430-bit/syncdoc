@@ -1,15 +1,21 @@
-// App.jsx — TEMPORARY: previewing the BlockEditor
-import BlockEditor from './components/BlockEditor';
+// App.jsx — sets up routing between all pages
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Dashboard from './pages/Dashboard';
+import Editor from './pages/Editor';
 
 function App() {
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Block Editor Test</h2>
-      <BlockEditor
-        currentUser="test-user"
-        onBlocksChange={(blocks) => console.log('Blocks updated:', blocks)}
-      />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/editor/:id" element={<Editor />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

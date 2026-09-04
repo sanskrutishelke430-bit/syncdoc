@@ -1,0 +1,68 @@
+/* Editor.css — styles for the document editor page */
+
+.editor-page {
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
+.editor-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 12px 20px;
+  border-bottom: 0.5px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.editor-back {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.editor-title-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.editor-title-input:focus {
+  background: var(--color-sidebar);
+}
+
+.editor-save-status {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.editor-save-status-saved {
+  color: var(--color-status-shared-text);
+}
+
+.editor-save-status-saving {
+  color: var(--color-text-muted);
+}
+
+.editor-save-status-error {
+  color: var(--color-status-draft-text);
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  gap: 8px;
+}
