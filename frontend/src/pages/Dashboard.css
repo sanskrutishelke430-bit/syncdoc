@@ -36,3 +36,24 @@
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
 }
+.dashboard-new-doc-inline {
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  margin-bottom: 1.75rem;
+}
+
+.dashboard-new-doc-inline:hover {
+  opacity: 0.9;
+}
+
+.dashboard-empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
