@@ -66,3 +66,16 @@
   color: var(--color-text-muted);
   gap: 8px;
 }
+.editor-connection-status {
+  font-size: 12px;
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+.editor-connection-status.connected {
+  color: var(--color-status-shared-text);
+}
+
+.editor-connection-status.disconnected {
+  color: var(--color-text-muted);
+}
